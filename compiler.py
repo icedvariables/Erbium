@@ -1,4 +1,5 @@
 from lexer import Lexer
+from parser import Parser
 
 code = """
 
@@ -8,10 +9,13 @@ x = (int32 y) -> int32 {
     y + 1
 }
 
+mut a = 5
+a = a + 10
+
 """
 
 l = Lexer()
-l.build()
+p = Parser()
 tokens = l.input(code)
 for token in tokens:
     print token

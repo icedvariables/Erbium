@@ -1,8 +1,13 @@
 import ply.lex as lex
 
 class Lexer:
+    def __init__(self, **kwargs):
+        self.lexer = lex.lex(module=self, **kwargs)
+    
     keywords = {
-        "if": "IF"
+        "if": "IF",
+	"else": "ELSE",
+	"mut": "MUTABLE"
     }
     
     tokens = [
@@ -63,10 +68,7 @@ class Lexer:
 
     def t_error(self, t):
         print "LEXICAL ERROR: Illegal character: " + str(t.value[0])
-    
-    def build(self, **kwargs):
-        self.lexer = lex.lex(module=self, **kwargs)
-    
+     
     def input(self, data):
         self.lexer.input(data)
         
