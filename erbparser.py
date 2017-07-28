@@ -1,9 +1,8 @@
 import ply.yacc as yacc
-
-from lexer import Lexer
+import alltokens
 
 class Parser:
-    tokens = Lexer.tokens
+    tokens = alltokens.tokensKeywords
 
     def __init__(self, **kwargs):
         self.parser = yacc.yacc(module=self, **kwargs)

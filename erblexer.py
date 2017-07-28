@@ -1,33 +1,11 @@
 import ply.lex as lex
+import alltokens
 
 class Lexer:
     def __init__(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
     
-    keywords = {
-        "if": "IF",
-	"else": "ELSE",
-	"mut": "MUTABLE"
-    }
-    
-    tokens = [
-        "ID",
-        
-        "REAL",
-        "NUMBER",
-        
-        "EQUALS",
-        "PLUS",
-        "MINUS",
-        "STAR",
-        "SLASH",
-        "ARROW",
-        
-        "LBRACKET",
-        "RBRACKET",
-        "LCURLY",
-        "RCURLY"
-    ] + list(keywords.values()) # Add the keywords to the tokens
+    tokens = alltokens.tokensKeywords
     
     t_EQUALS    = r"="
     t_PLUS      = r"\+"
@@ -48,7 +26,7 @@ class Lexer:
         r"[a-zA-Z_][a-zA-Z_0-9]*"
         
         # Check if this is actually a keyword instead of an id
-        t.type = self.keywords.get(t.value, "ID")
+        t.type = alltokens.keywords.get(t.value, "ID")
         
         return t
 

@@ -1,5 +1,5 @@
-from lexer import Lexer
-from parser import Parser
+import erblexer
+import erbparser
 
 code = """
 
@@ -14,8 +14,8 @@ a = a + 10
 
 """
 
-l = Lexer()
-p = Parser()
+l = erblexer.Lexer()
+p = erbparser.Parser()
 tokens = l.input(code)
 for token in tokens:
     print token
