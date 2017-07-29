@@ -2,7 +2,7 @@ import ply.lex as lex
 import alltokens
 
 class Lexer:
-    def __init__(self, **kwargs):
+    def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
     
     tokens = alltokens.tokensKeywords
