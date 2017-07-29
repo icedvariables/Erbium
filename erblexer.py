@@ -30,12 +30,12 @@ class Lexer:
         
         return t
 
-    def t_REAL(self, t): # Match a decimal value
-        r"\d+\.\d+"
-        t.value = float(t.value)
+    def t_DECIMALNUM(self, t): # Match a decimal value
+        r"\d+\.\d*"
+        t.value = double(t.value)
         return t
 
-    def t_NUMBER(self, t): # Match an integer value
+    def t_NUM(self, t): # Match an integer value
         r"\d+"
         t.value = int(t.value)
         return t

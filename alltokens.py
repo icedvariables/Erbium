@@ -11,8 +11,8 @@ keywords = {
 tokens = [
     "ID",
 
-    "REAL",
-    "NUMBER",
+    "NUM",
+    "DECIMALNUM",
 
     "EQUALS",
     "PLUS",

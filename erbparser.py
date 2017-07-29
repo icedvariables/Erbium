@@ -46,13 +46,13 @@ class Parser:
     
     # EXPRESSION
     
-    def p_expr_number(self, p):
-        "expression : NUMBER"
+    def p_expr_num(self, p):
+        "expression : NUM"
         p[0] = ("number", p[1])
     
-    def p_expr_real(self, p):
-        "expression : REAL"
-        p[0] = ("real", p[1])
+    def p_expr_decimalnum(self, p):
+        "expression : DECIMALNUM"
+        p[0] = ("decimal-number", p[1])
 
     def p_error(self, p):
         print "SYNTAX ERROR: invalid syntax: " + str(p)
