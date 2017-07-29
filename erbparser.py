@@ -53,7 +53,7 @@ class Parser:
     # TYPENAME
 
     def p_typename(self, p):
-        "typename : ID ID"
+        "typename : type ID"
         dataType = p[1]
         name = p[2]
         p[0] = ("typename", dataType, name)
@@ -67,6 +67,16 @@ class Parser:
     def p_typenamelist(self, p):
         "typenamelist : typename COMMA typenamelist"
         p[0] = (p[1],) + p[3]
+
+    # TYPE
+
+    def p_type(self, p):
+        "type : ID"
+        p[0] = ("type", p[1])
+
+    def p_type_function(self, p):
+        "type :  ID ARROW ID"
+        p[0] = ("type", p[1], p[3])
 
     def p_error(self, p):
         print "SYNTAX ERROR: invalid syntax: " + str(p)
