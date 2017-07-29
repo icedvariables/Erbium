@@ -20,6 +20,7 @@ tokens = [
     "STAR",
     "SLASH",
     "ARROW",
+    "COMMA",
 
     "LBRACKET",
     "RBRACKET",
