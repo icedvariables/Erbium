@@ -19,6 +19,8 @@ class Lexer:
     t_RBRACKET  = r"\)"
     t_LCURLY    = r"\{"
     t_RCURLY    = r"\}"
+    t_LSQUARE   = r"\["
+    t_RSQUARE   = r"\]"
 
     t_ignore = " \t"
     t_ignore_COMMENT = r"\/\*.*\*\/" # Discard anthing between /* and */

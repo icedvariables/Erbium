@@ -70,13 +70,23 @@ class Parser:
 
     # TYPE
 
+    def p_type_function(self, p):
+        "type :  onetype ARROW onetype"
+        p[0] = ("type-function", p[1], p[3])
+
     def p_type(self, p):
-        "type : ID"
+        "type : onetype"
         p[0] = ("type", p[1])
 
-    def p_type_function(self, p):
-        "type :  ID ARROW ID"
-        p[0] = ("type", p[1], p[3])
+    # ONETYPE
+
+    def p_onetype_array(self, p):
+        "onetype : ID LSQUARE NUM RSQUARE"
+        p[0] = ("onetype-array", p[1], p[3])
+
+    def p_onetype(self, p):
+        "onetype : ID"
+        p[0] = ("onetype", p[1])
 
     def p_error(self, p):
         print "SYNTAX ERROR: invalid syntax: " + str(p)

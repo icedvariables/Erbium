@@ -25,7 +25,9 @@ tokens = [
     "LBRACKET",
     "RBRACKET",
     "LCURLY",
-    "RCURLY"
+    "RCURLY",
+    "LSQUARE",
+    "RSQUARE"
 ]
 
 tokensKeywords = tokens + list(keywords.values())
