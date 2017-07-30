@@ -14,5 +14,5 @@ x = (int32 y) -> int32 {
 
 erblexer.Lexer().build()
 p = erbparser.Parser(debug=True)
-result = p.parse("int32[5]->int32 x = 5")
+result = p.parse("float x = 5.5")
 pprint.pprint(result)

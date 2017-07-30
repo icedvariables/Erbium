@@ -2,12 +2,17 @@ import ply.yacc as yacc
 import alltokens
 
 class Parser:
+    tokens = alltokens.tokensKeywords
+    BUILTIN_TYPES = {
+        "int32": ("number"),
+        "int16": ("number"),
+        "float": ("number", "decimal-number")
+    }
+
     def __init__(self, **kwargs):
         self.parser = yacc.yacc(module=self, **kwargs)
-        self.scopes = {"global":{}}
+        self.types = Parser.BUILTIN_TYPES
         self.ast = ()
-
-    tokens = alltokens.tokensKeywords
 
     # CHUNK
 
@@ -34,20 +39,26 @@ class Parser:
         elseBlock = p[5]
         p[0] = ("if", condition, block, elseBlock)
 
-    def p_stat_assign_with_type(self, p):
+    def p_stat_assign_with_type(self, p): # TODO: Check if value is valid based on the type given.
         "statement : typename EQUALS expression"
-        name = p[1]
+        typeName = p[1]
         value = p[3]
-        p[0] = ("assign", name, value)
+        p[0] = ("assign", typeName, value)
 
     # EXPRESSION
 
-    def p_expr_num(self, p):
-        "expression : NUM"
+    def p_expr_value(self, p):
+        "expression : value"
+        p[0] = ("value", p[1])
+
+    # VALUE
+
+    def p_value_num(self, p):
+        "value : NUM"
         p[0] = ("number", p[1])
 
-    def p_expr_decimalnum(self, p):
-        "expression : DECIMALNUM"
+    def p_value_decimalnum(self, p):
+        "value : DECIMALNUM"
         p[0] = ("decimal-number", p[1])
 
     # TYPENAME
@@ -82,11 +93,20 @@ class Parser:
 
     def p_onetype_array(self, p):
         "onetype : ID LSQUARE NUM RSQUARE"
-        p[0] = ("onetype-array", p[1], p[3])
+        dataType = p[1]
+        amount = p[3]
+
+        print "Data type " + dataType + "[" + str(amount) + "] is " + ("valid" if self.isExistingType(dataType) else "invalid")
+
+        p[0] = ("onetype-array", dataType, amount)
 
     def p_onetype(self, p):
         "onetype : ID"
-        p[0] = ("onetype", p[1])
+        dataType = p[1]
+
+        print "Data type " + dataType + " is " + ("valid" if self.isExistingType(dataType) else "invalid")
+
+        p[0] = ("onetype", dataType)
 
     def p_error(self, p):
         print "SYNTAX ERROR: invalid syntax: " + str(p)
@@ -94,3 +114,6 @@ class Parser:
     def parse(self, code):
         self.ast = self.parser.parse(code)
         return self.ast
+
+    def isExistingType(self, dataType):
+        return dataType in self.types.keys()

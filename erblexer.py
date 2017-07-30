@@ -35,7 +35,7 @@ class Lexer:
 
     def t_DECIMALNUM(self, t): # Match a decimal value
         r"\d+\.\d*"
-        t.value = double(t.value)
+        t.value = float(t.value)
         return t
 
     def t_NUM(self, t): # Match an integer value
