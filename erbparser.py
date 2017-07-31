@@ -40,10 +40,19 @@ class Parser:
         p[0] = ("if", condition, block, elseBlock)
 
     def p_stat_assign_with_type(self, p): # TODO: Check if value is valid based on the type given.
-        "statement : typename EQUALS expression"
-        typeName = p[1]
-        value = p[3]
-        p[0] = ("assign", typeName, value)
+        "statement : type ID EQUALS expression"
+        dataType = p[1]
+        name = p[2]
+        value = p[4]
+        p[0] = ("assign", dataType, name, value)
+
+    def p_stat_assign_function(self, p): # TODO: Add functions with multiple arguments.
+        "statement : functiontype ID EQUALS LBRACKET ID RBRACKET block"
+        dataType = p[1]
+        name = p[2]
+        arg = p[5]
+        block = p[7]
+        p[0] = ("assign-function", dataType, name, arg, block)
 
     # EXPRESSION
 
@@ -61,52 +70,31 @@ class Parser:
         "value : DECIMALNUM"
         p[0] = ("decimal-number", p[1])
 
-    # TYPENAME
-
-    def p_typename(self, p):
-        "typename : type ID"
-        dataType = p[1]
-        name = p[2]
-        p[0] = ("typename", dataType, name)
-
-    # TYPENAMELIST
-
-    def p_typenamelist_typename(self, p):
-        "typenamelist : typename"
-        p[0] = (p[1],)
-
-    def p_typenamelist(self, p):
-        "typenamelist : typename COMMA typenamelist"
-        p[0] = (p[1],) + p[3]
-
     # TYPE
 
-    def p_type_function(self, p):
-        "type :  onetype ARROW onetype"
-        p[0] = ("type-function", p[1], p[3])
+    def p_functiontype(self, p):
+        "functiontype : type ARROW type"
+        arg = p[1]
+        ret = p[3]
 
-    def p_type(self, p):
-        "type : onetype"
-        p[0] = ("type", p[1])
+        p[0] = ("functiontype", arg, ret)
 
-    # ONETYPE
-
-    def p_onetype_array(self, p):
-        "onetype : ID LSQUARE NUM RSQUARE"
+    def p_type_array(self, p):
+        "type : ID LSQUARE NUM RSQUARE"
         dataType = p[1]
         amount = p[3]
 
-        print "Data type " + dataType + "[" + str(amount) + "] is " + ("valid" if self.isExistingType(dataType) else "invalid")
+        print "Data type " + dataType + "[" + str(amount) + "] " + ("exists." if self.isExistingType(dataType) else "does not exist!")
 
-        p[0] = ("onetype-array", dataType, amount)
+        p[0] = ("type-array", dataType, amount)
 
-    def p_onetype(self, p):
-        "onetype : ID"
+    def p_one_id(self, p):
+        "type : ID"
         dataType = p[1]
 
-        print "Data type " + dataType + " is " + ("valid" if self.isExistingType(dataType) else "invalid")
+        print "Data type " + dataType + " " + ("exists." if self.isExistingType(dataType) else "does not exist!")
 
-        p[0] = ("onetype", dataType)
+        p[0] = ("type", dataType)
 
     def p_error(self, p):
         print "SYNTAX ERROR: invalid syntax: " + str(p)
