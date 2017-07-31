@@ -10,6 +10,8 @@ int32->int32 a = (x){
     int32 y = 10
 }
 
+int32 b = a(5, 10.5, f)
+
 """
 
 erblexer.Lexer().build()

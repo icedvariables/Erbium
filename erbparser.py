@@ -54,21 +54,50 @@ class Parser:
         block = p[7]
         p[0] = ("assign-function", dataType, name, arg, block)
 
+    def p_stat_functioncall(self, p):
+        "statement : functioncall"
+        p[0] = p[1]
+
     # EXPRESSION
 
-    def p_expr_value(self, p):
-        "expression : value"
-        p[0] = ("value", p[1])
-
-    # VALUE
-
-    def p_value_num(self, p):
-        "value : NUM"
+    def p_expr_num(self, p):
+        "expression : NUM"
         p[0] = ("number", p[1])
 
-    def p_value_decimalnum(self, p):
-        "value : DECIMALNUM"
+    def p_expr_decimalnum(self, p):
+        "expression : DECIMALNUM"
         p[0] = ("decimal-number", p[1])
+
+    def p_expr_functioncall(self, p):
+        "expression : functioncall"
+        p[0] = p[1]
+
+    def p_expr_id(self, p):
+        "expression : ID"
+        p[0] = ("id", p[1])
+
+    # EXPRESSIONLIST
+
+    def p_exprlist(self, p):
+        "expressionlist : expression COMMA expressionlist"
+        p[0] = (p[1],) + p[3]
+
+    def p_exprlist_expr(self, p):
+        "expressionlist : expression"
+        p[0] = (p[1],)
+
+    # FUNCTIONCALL
+
+    def p_functioncall(self, p):
+        "functioncall : ID LBRACKET expressionlist RBRACKET"
+        name = p[1]
+        args = p[3]
+        p[0] = ("functioncall", name, args)
+
+    def p_functioncall_no_args(self, p):
+        "functioncall : ID LBRACKET RBRACKET"
+        name = p[1]
+        p[0] = ("functioncall", name, ())
 
     # TYPE
 
