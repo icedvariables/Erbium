@@ -40,19 +40,12 @@ class Parser:
         p[0] = ("if", condition, block, elseBlock)
 
     def p_stat_assign_with_type(self, p): # TODO: Check if value is valid based on the type given.
-        "statement : type ID EQUALS expression"
+        """statement : type ID EQUALS expression
+                     | functiontype ID EQUALS expression"""
         dataType = p[1]
         name = p[2]
         value = p[4]
         p[0] = ("assign", dataType, name, value)
-
-    def p_stat_assign_function(self, p): # TODO: Add functions with multiple arguments.
-        "statement : functiontype ID EQUALS LBRACKET ID RBRACKET block"
-        dataType = p[1]
-        name = p[2]
-        arg = p[5]
-        block = p[7]
-        p[0] = ("assign-function", dataType, name, arg, block)
 
     def p_stat_functioncall(self, p):
         "statement : functioncall"
@@ -68,13 +61,17 @@ class Parser:
         "expression : DECIMALNUM"
         p[0] = ("decimal-number", p[1])
 
-    def p_expr_functioncall(self, p):
-        "expression : functioncall"
-        p[0] = p[1]
-
     def p_expr_id(self, p):
         "expression : ID"
         p[0] = ("id", p[1])
+    
+    def p_expr_functioncall(self, p):
+        "expression : functioncall"
+        p[0] = p[1]
+    
+    def p_expr_functiondef(self, p):
+        "expression : functiondefine"
+        p[0] = p[1]
 
     # EXPRESSIONLIST
 
@@ -98,6 +95,14 @@ class Parser:
         "functioncall : ID LBRACKET RBRACKET"
         name = p[1]
         p[0] = ("functioncall", name, ())
+    
+    # FUNCTIONDEFINE
+    
+    def p_functiondef(self, p): # TODO: Allow functions to take multiple arguments.
+        "functiondefine : LBRACKET ID RBRACKET block"
+        args = (p[2],)
+        block = p[4]
+        p[0] = ("functiondefine", args, block)
 
     # TYPE
 
