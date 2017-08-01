@@ -6,11 +6,11 @@ code = """
 
 /* Assign x to a function that takes a 32-bit signed integer called y and returns a 32-bit signed integer equal to y + 1. */
 
-a = (int32 x, int32 y) -> int32 {
-    int32 z = 10
+a = (int x, int y) -> char {
+    char z = '@'
 }
 
-int32 b = a(5, 10.5, f)
+char b = foo(5, 10.5, f, 'g')
 
 """
 

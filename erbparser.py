@@ -4,9 +4,10 @@ import alltokens
 class Parser:
     tokens = alltokens.tokensKeywords
     BUILTIN_TYPES = {
-        "int32": ("number"),
-        "int16": ("number"),
-        "float": ("number", "decimal-number")
+        "int": ("number"),
+        "long": ("number"),
+        "float": ("number", "decimal-number"),
+        "char": ("character")
     }
 
     def __init__(self, **kwargs):
@@ -70,6 +71,10 @@ class Parser:
     def p_expr_id(self, p):
         "expression : ID"
         p[0] = ("id", p[1])
+    
+    def p_expr_character(self, p):
+        "expression : CHARACTER"
+        p[0] = ("character", p[1])
     
     def p_expr_functioncall(self, p):
         "expression : functioncall"
