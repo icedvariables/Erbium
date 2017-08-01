@@ -7,13 +7,18 @@ class Lexer:
 
     tokens = alltokens.tokensKeywords
 
-    t_EQUALS    = r"="
-    t_PLUS      = r"\+"
-    t_MINUS     = r"-"
-    t_STAR      = r"\*"
-    t_SLASH     = r"/"
-    t_ARROW     = r"->"
-    t_COMMA     = r","
+    t_EQUALS            = r"="
+    t_PLUS              = r"\+"
+    t_MINUS             = r"-"
+    t_STAR              = r"\*"
+    t_SLASH             = r"/"
+    t_ARROW             = r"->"
+    t_COMMA             = r","
+    t_GREATERTHAN       =r">"
+    t_LESSTHAN          = r"<"
+    t_GREATERTHANOREQUAL= r">="
+    t_LESSTHANOREQUAL   = r"<="
+    t_EQUALTO           = r"=="
 
     t_LBRACKET  = r"\("
     t_RBRACKET  = r"\)"

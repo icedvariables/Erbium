@@ -5,7 +5,8 @@ keywords = {
     "public": "PUBLIC",
     "true": "TRUE",
     "false": "FALSE",
-    "null": "NULL"
+    "null": "NULL",
+    "ret": "RETURN"
 }
 
 tokens = [
@@ -22,6 +23,11 @@ tokens = [
     "SLASH",
     "ARROW",
     "COMMA",
+    "GREATERTHAN",
+    "LESSTHAN",
+    "GREATERTHANOREQUAL",
+    "LESSTHANOREQUAL",
+    "EQUALTO",
 
     "LBRACKET",
     "RBRACKET",

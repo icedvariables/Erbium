@@ -30,15 +30,25 @@ class Parser:
     def p_block(self, p):
         "block : LCURLY chunk RCURLY"
         p[0] = ("block", p[2])
+    
+    def p_block_empty(self, p):
+        "block : LCURLY RCURLY"
+        p[0] = ("block", ())
 
     # STATEMENT
 
-    def p_stat_if(self, p):
+    def p_stat_ifelse(self, p):
         "statement : IF expression block ELSE block"
         condition = p[2]
         block = p[3]
         elseBlock = p[5]
-        p[0] = ("if", condition, block, elseBlock)
+        p[0] = ("ifelse", condition, block, elseBlock)
+    
+    def p_stat_if(self, p):
+        "statement : IF expression block"
+        condition = p[2]
+        block = p[3]
+        p[0] = ("if", condition, block)
     
     def p_stat_assign(self, p):
         "statement : ID EQUALS expression"
@@ -57,6 +67,10 @@ class Parser:
     def p_stat_functioncall(self, p):
         "statement : functioncall"
         p[0] = p[1]
+        
+    def p_stat_return(self, p):
+        "statement : RETURN expression"
+        p[0] = ("return", p[2])
 
     # EXPRESSION
 
@@ -83,6 +97,36 @@ class Parser:
     def p_expr_functiondef(self, p):
         "expression : functiondefine"
         p[0] = p[1]
+    
+    def p_expr_greaterthan(self, p):
+        "expression : expression GREATERTHAN expression"
+        p[0] = ("greaterthan", p[1], p[3])
+    
+    def p_expr_lessthan(self, p):
+        "expression : expression LESSTHAN expression"
+        p[0] = ("lessthan", p[1], p[3])
+    
+    def p_expr_greaterthanorequal(self, p):
+        "expression : expression GREATERTHANOREQUAL expression"
+        p[0] = ("greaterthanorequal", p[1], p[3])
+    
+    def p_expr_lessthanorequal(self, p):
+        "expression : expression LESSTHANOREQUAL expression"
+        p[0] = ("lessthanorequal", p[1], p[3])
+    
+    def p_expr_equalto(self, p):
+        "expression : expression EQUALTO expression"
+        p[0] = ("equalto", p[1], p[3])
+    
+    # TODO: Add operator precedence!
+    
+    def p_expr_add(self, p):
+        "expression : expression PLUS expression"
+        p[0] = ("add", p[1], p[3])
+    
+    def p_expr_subtract(self, p):
+        "expression : expression MINUS expression"
+        p[0] = ("subtract", p[1], p[3])
 
     # EXPRESSIONLIST
 

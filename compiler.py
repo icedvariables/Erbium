@@ -4,13 +4,16 @@ import pprint
 
 code = """
 
-/* Assign x to a function that takes a 32-bit signed integer called y and returns a 32-bit signed integer equal to y + 1. */
+/* Recursive fibonacci sequence generator! */
 
-a = (int x, int y) -> char {
-    char z = '@'
+fib = (int n) -> int {
+    if n < 2 {
+        ret n
+    }
+    ret fib(n - 2) + fib(n - 1)
 }
 
-char b = foo(5, 10.5, f, 'g')
+fib(10) /* should return 55 */
 
 """
 
