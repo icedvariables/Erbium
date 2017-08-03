@@ -6,7 +6,7 @@ code = """
 
 /* Recursive fibonacci sequence generator! */
 
-fib = (int n) -> int {
+fib = (n) -> {
     if n < 2 {
         ret n
     }
@@ -19,5 +19,5 @@ fib(10) /* should return 55 */
 
 erblexer.Lexer().build()
 p = erbparser.Parser(debug=True)
-result = p.parse("a = 5")
+result = p.parse(code)
 pprint.pprint(result)

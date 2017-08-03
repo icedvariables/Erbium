@@ -11,16 +11,9 @@ class Parser:
         ("left", "PLUS", "MINUS"),
         ("left", "TIMES", "DIVIDE")
     )
-    
-    BUILTIN_TYPES = {
-        "int",
-        "float",
-        "char"
-    }
 
     def __init__(self, **kwargs):
         self.parser = yacc.yacc(module=self, **kwargs)
-        self.types = Parser.BUILTIN_TYPES
         self.ast = ()
 
     # CHUNK
@@ -60,15 +53,9 @@ class Parser:
     
     def p_stat_assign(self, p):
         "statement : ID EQUALS expression"
+        name = p[1]
         value = p[3]
-        typeid = ("unknown", p[1])
-        p[0] = ("assign", typeid, value)
-
-    def p_stat_assign_with_type(self, p): # TODO: Check if value is valid based on the type given.
-        "statement : typeid EQUALS expression"
-        typeid = p[1]
-        value = p[3]
-        p[0] = ("assign", typeid, value)
+        p[0] = ("assign", name, value)
 
     def p_stat_functioncall(self, p):
         "statement : functioncall"
@@ -162,65 +149,26 @@ class Parser:
     # FUNCTIONDEFINE
     
     def p_functiondef(self, p):
-        "functiondefine : LBRACKET typeidlist RBRACKET ARROW type block"
+        "functiondefine : LBRACKET idlist RBRACKET ARROW block"
         args = p[2]
-        ret = p[5]
-        block = p[6]
-        p[0] = ("functiondefine", args, ret, block)
+        block = p[5]
+        p[0] = ("functiondefine", args, block)
     
     def p_functiondef_no_args(self, p):
-        "functiondefine : LBRACKET RBRACKET ARROW type block"
+        "functiondefine : LBRACKET RBRACKET ARROW block"
         args = ()
-        ret = p[4]
-        block = p[5]
-        p[0] = ("functiondefine", args, ret, block)
-
-    # TYPE
+        block = p[4]
+        p[0] = ("functiondefine", args, block)
     
-    def p_type(self, p):
-        """type : singletype
-                | arraytype
-                | functiontype"""
-        p[0] = p[1]
-
-    def p_functiontype(self, p):
-        "functiontype : type ARROW type"
-        arg = p[1]
-        ret = p[3]
-
-        p[0] = ("functiontype", arg, ret)
-
-    def p_singletype_id(self, p):
-        "singletype : ID"
-        dataType = p[1]
-
-        print "Data type " + dataType + " " + ("exists." if self.isExistingType(dataType) else "does not exist!")
-
-        p[0] = ("singletype", dataType)
+    # IDLIST
     
-    def p_arraytype(self, p):
-        "arraytype : ID LSQUARE RSQUARE"
-        dataType = p[1]
-
-        print "Data type " + dataType + "[] " + ("exists." if self.isExistingType(dataType) else "does not exist!")
-
-        p[0] = ("arraytype", dataType)
-    
-    # TYPEID
-    
-    def p_typeid(self, p):
-        "typeid : type ID"
-        dataType = p[1]
-        name = p[2]
-        p[0] = ("typeid", dataType, name)
-    
-    def p_typeidlist(self, p):
-        "typeidlist : typeid COMMA typeidlist"
+    def p_idlist(self, p):
+        "idlist : ID COMMA idlist"
         p[0] = (p[1],) + p[3]
     
-    def p_typeidlist_typeid(self, p):
-        "typeidlist : typeid"
-        p[0] = (p[1],)
+    def p_idlist_id(self, p):
+        "idlist : ID"
+        p[0] = (p[1])
 
 
 
@@ -234,6 +182,3 @@ class Parser:
     def parse(self, code):
         self.ast = self.parser.parse(code)
         return self.ast
-
-    def isExistingType(self, dataType):
-        return dataType in self.types
