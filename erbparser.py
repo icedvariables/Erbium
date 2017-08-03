@@ -61,17 +61,15 @@ class Parser:
     
     def p_stat_assign(self, p):
         "statement : ID EQUALS expression"
-        dataType = "unknown-type" # TODO: Infer data type.
-        name = p[1]
+        typeid = ("unknown-type", p[1])
         value = p[3]
-        p[0] = ("assign", dataType, name, value)
+        p[0] = ("assign", typeid, value)
 
     def p_stat_assign_with_type(self, p): # TODO: Check if value is valid based on the type given.
-        "statement : type ID EQUALS expression"
-        dataType = p[1]
-        name = p[2]
-        value = p[4]
-        p[0] = ("assign", dataType, name, value)
+        "statement : typeid EQUALS expression"
+        typeid = p[1]
+        value = p[3]
+        p[0] = ("assign", typeid, value)
 
     def p_stat_functioncall(self, p):
         "statement : functioncall"
