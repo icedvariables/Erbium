@@ -13,10 +13,9 @@ class Parser:
     )
     
     BUILTIN_TYPES = {
-        "int": ("number"),
-        "long": ("number"),
-        "float": ("number", "decimal-number"),
-        "char": ("character")
+        "int",
+        "float",
+        "char"
     }
 
     def __init__(self, **kwargs):
@@ -61,8 +60,8 @@ class Parser:
     
     def p_stat_assign(self, p):
         "statement : ID EQUALS expression"
-        typeid = ("unknown-type", p[1])
         value = p[3]
+        typeid = ("unknown", p[1])
         p[0] = ("assign", typeid, value)
 
     def p_stat_assign_with_type(self, p): # TODO: Check if value is valid based on the type given.
@@ -83,19 +82,19 @@ class Parser:
 
     def p_expr_num(self, p):
         "expression : NUM"
-        p[0] = ("number", p[1])
+        p[0] = ("int", p[1])
 
     def p_expr_decimalnum(self, p):
         "expression : DECIMALNUM"
-        p[0] = ("decimal-number", p[1])
+        p[0] = ("float", p[1])
+
+    def p_expr_character(self, p):
+        "expression : CHARACTER"
+        p[0] = ("char", p[1])
 
     def p_expr_id(self, p):
         "expression : ID"
         p[0] = ("id", p[1])
-    
-    def p_expr_character(self, p):
-        "expression : CHARACTER"
-        p[0] = ("character", p[1])
     
     def p_expr_functioncall(self, p):
         "expression : functioncall"
@@ -121,41 +120,21 @@ class Parser:
         "expression : STRING"
         p[0] = ("array", tuple(p[1]))
     
-    def p_expr_greaterthan(self, p):
-        "expression : expression GREATERTHAN expression"
-        p[0] = ("greaterthan", p[1], p[3])
-    
-    def p_expr_lessthan(self, p):
-        "expression : expression LESSTHAN expression"
-        p[0] = ("lessthan", p[1], p[3])
-    
-    def p_expr_greaterthanorequal(self, p):
-        "expression : expression GREATERTHANOREQUAL expression"
-        p[0] = ("greaterthanorequal", p[1], p[3])
-    
-    def p_expr_lessthanorequal(self, p):
-        "expression : expression LESSTHANOREQUAL expression"
-        p[0] = ("lessthanorequal", p[1], p[3])
-    
-    def p_expr_equalto(self, p):
-        "expression : expression EQUALTO expression"
-        p[0] = ("equalto", p[1], p[3])
-    
-    def p_expr_add(self, p):
-        "expression : expression PLUS expression"
-        p[0] = ("add", p[1], p[3])
-    
-    def p_expr_subtract(self, p):
-        "expression : expression MINUS expression"
-        p[0] = ("subtract", p[1], p[3])
-    
-    def p_expr_multiply(self, p):
-        "expression : expression TIMES expression"
-        p[0] = ("multiply", p[1], p[3])
-    
-    def p_expr_divide(self, p):
-        "expression : expression DIVIDE expression"
-        p[0] = ("divide", p[1], p[3])
+    def p_expr_binop(self, p):
+        """expression : expression GREATERTHAN expression
+                      | expression LESSTHAN expression
+                      | expression GREATERTHANOREQUAL expression
+                      | expression LESSTHANOREQUAL expression
+                      | expression EQUALTO expression
+                      | expression PLUS expression
+                      | expression MINUS expression
+                      | expression TIMES expression
+                      | expression DIVIDE expression"""
+        
+        left = p[1]
+        operation = p[2]
+        right = p[3]
+        p[0] = ("binop", operation, left, right)
 
     # EXPRESSIONLIST
 
@@ -257,4 +236,4 @@ class Parser:
         return self.ast
 
     def isExistingType(self, dataType):
-        return dataType in self.types.keys()
+        return dataType in self.types
