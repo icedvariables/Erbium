@@ -105,6 +105,18 @@ class Parser:
         "expression : functiondefine"
         p[0] = p[1]
     
+    def p_expr_array(self, p):
+        "expression : LSQUARE expressionlist RSQUARE"
+        p[0] = ("array", p[2])
+    
+    def p_expr_array_empty(self, p):
+        "expression : LSQUARE RSQUARE"
+        p[0] = ("array", ())
+    
+    def p_expr_arrayaccess(self, p):
+        "expression : ID LSQUARE NUM RSQUARE"
+        p[0] = ("arrayaccess", p[1], p[3])
+    
     def p_expr_greaterthan(self, p):
         "expression : expression GREATERTHAN expression"
         p[0] = ("greaterthan", p[1], p[3])
@@ -184,24 +196,16 @@ class Parser:
     
     def p_type(self, p):
         """type : singletype
+                | arraytype
                 | functiontype"""
         p[0] = p[1]
 
     def p_functiontype(self, p):
-        "functiontype : singletype ARROW singletype"
+        "functiontype : type ARROW type"
         arg = p[1]
         ret = p[3]
 
         p[0] = ("functiontype", arg, ret)
-
-    def p_singletype_array(self, p):
-        "singletype : ID LSQUARE NUM RSQUARE"
-        dataType = p[1]
-        amount = p[3]
-
-        print "Data type " + dataType + "[" + str(amount) + "] " + ("exists." if self.isExistingType(dataType) else "does not exist!")
-
-        p[0] = ("singletype-array", dataType, amount)
 
     def p_singletype_id(self, p):
         "singletype : ID"
@@ -210,6 +214,14 @@ class Parser:
         print "Data type " + dataType + " " + ("exists." if self.isExistingType(dataType) else "does not exist!")
 
         p[0] = ("singletype", dataType)
+    
+    def p_arraytype(self, p):
+        "arraytype : ID LSQUARE RSQUARE"
+        dataType = p[1]
+
+        print "Data type " + dataType + "[] " + ("exists." if self.isExistingType(dataType) else "does not exist!")
+
+        p[0] = ("arraytype", dataType)
     
     # TYPEID
     
