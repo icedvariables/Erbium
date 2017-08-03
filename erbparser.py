@@ -117,6 +117,10 @@ class Parser:
         "expression : ID LSQUARE NUM RSQUARE"
         p[0] = ("arrayaccess", p[1], p[3])
     
+    def p_expr_string(self, p):
+        "expression : STRING"
+        p[0] = ("array", tuple(p[1]))
+    
     def p_expr_greaterthan(self, p):
         "expression : expression GREATERTHAN expression"
         p[0] = ("greaterthan", p[1], p[3])

@@ -48,10 +48,15 @@ class Lexer:
         r"\d+"
         t.value = int(t.value)
         return t
-    
-    def t_CHARACTER(self, t): # Match a single character
-        r"'[^']'"
+
+    def t_CHARACTER(self, t): # Match a single character between single quotes
+        r"'[^']?'"
         t.value = t.value[1:-1] # Remove the two quotes around the character
+        return t
+
+    def t_STRING(self, t): # Match a string of characters between double quotes
+        r'"[^"]*"'
+        t.value = t.value[1:-1] # Remove the two quotes around the string
         return t
 
     def t_newline(self, t):

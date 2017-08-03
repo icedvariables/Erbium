@@ -15,6 +15,7 @@ tokens = [
     "NUM",
     "DECIMALNUM",
     "CHARACTER",
+    "STRING",
 
     "EQUALS",
     "PLUS",
