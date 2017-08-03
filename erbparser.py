@@ -3,6 +3,14 @@ import alltokens
 
 class Parser:
     tokens = alltokens.tokensKeywords
+    
+    # Multiplication and division have higher precedence than addition and subtraction:
+    # 5 + 10 * 8 would become 5 + (10 * 8) and not (5 + 10) * 8
+    precedence = (
+        ("left", "PLUS", "MINUS"),
+        ("left", "TIMES", "DIVIDE"),
+    )
+    
     BUILTIN_TYPES = {
         "int": ("number"),
         "long": ("number"),
@@ -118,8 +126,6 @@ class Parser:
         "expression : expression EQUALTO expression"
         p[0] = ("equalto", p[1], p[3])
     
-    # TODO: Add operator precedence!
-    
     def p_expr_add(self, p):
         "expression : expression PLUS expression"
         p[0] = ("add", p[1], p[3])
@@ -127,6 +133,14 @@ class Parser:
     def p_expr_subtract(self, p):
         "expression : expression MINUS expression"
         p[0] = ("subtract", p[1], p[3])
+    
+    def p_expr_multiply(self, p):
+        "expression : expression TIMES expression"
+        p[0] = ("multiply", p[1], p[3])
+    
+    def p_expr_divide(self, p):
+        "expression : expression DIVIDE expression"
+        p[0] = ("divide", p[1], p[3])
 
     # EXPRESSIONLIST
 

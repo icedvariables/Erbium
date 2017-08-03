@@ -19,5 +19,5 @@ fib(10) /* should return 55 */
 
 erblexer.Lexer().build()
 p = erbparser.Parser(debug=True)
-result = p.parse(code)
+result = p.parse("a = 5 + 10 * 8")
 pprint.pprint(result)
