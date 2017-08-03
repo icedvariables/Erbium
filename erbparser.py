@@ -8,7 +8,7 @@ class Parser:
     # 5 + 10 * 8 would become 5 + (10 * 8) and not (5 + 10) * 8
     precedence = (
         ("left", "PLUS", "MINUS"),
-        ("left", "TIMES", "DIVIDE"),
+        ("left", "TIMES", "DIVIDE")
     )
     
     BUILTIN_TYPES = {
