@@ -1,5 +1,6 @@
 import ply.lex as lex
 import alltokens
+import sys
 
 class Lexer:
     def build(self, **kwargs):
@@ -58,7 +59,8 @@ class Lexer:
         t.lexer.lineno += len(t.value) # Count line numbers
 
     def t_error(self, t):
-        print "LEXICAL ERROR: Illegal character: " + str(t.value[0])
+        print "LEXICAL ERROR:" + str(t.lineno) + ":" + str(t.lexpos) + ": Unexpected character: " + t.value[0]
+        sys.exit()
 
     def input(self, data):
         self.lexer.input(data)

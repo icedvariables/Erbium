@@ -1,5 +1,6 @@
 import ply.yacc as yacc
 import alltokens
+import sys
 
 class Parser:
     tokens = alltokens.tokensKeywords
@@ -231,7 +232,11 @@ class Parser:
 
 
     def p_error(self, p):
-        print "SYNTAX ERROR: invalid syntax: " + str(p)
+        if(p):
+            print "SYNTAX ERROR:" + str(p.lineno) + ":" + str(p.lexpos) + ": Invalid syntax: " + str(p.value)
+        else:
+            print "SYNTAX ERROR: Unexpected end of input."
+        sys.exit()
 
     def parse(self, code):
         self.ast = self.parser.parse(code)
