@@ -1,4 +1,5 @@
-import erbparser
+from erbparser import Parser
+from executeast import ExecuteAst
 import pprint
 
 code = """
@@ -8,12 +9,13 @@ code = """
 (n) -> {
     if n < 2
         <- n
-    else
-        <- fib(n - 2) + fib(n - 1)
+    <- fib(n - 2) + fib(n - 1)
 }(10) /* Call the anonymous function immediately after defining it. */
 
 """
 
-p = erbparser.Parser(debug=True)
-result = p.parse(code)
-pprint.pprint(result)
+p = Parser(debug=True)
+ast = p.parse("a = 5")
+pprint.pprint(ast)
+executer = ExecuteAst(ast)
+print executer.execute()
