@@ -168,7 +168,7 @@ class Parser:
 
     def p_idlist_id(self, p):
         "idlist : ID"
-        p[0] = (p[1])
+        p[0] = (p[1],)
 
 
 
