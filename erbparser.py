@@ -1,4 +1,5 @@
 import ply.yacc as yacc
+import erblexer
 import alltokens
 import sys
 
@@ -13,6 +14,7 @@ class Parser:
     )
 
     def __init__(self, **kwargs):
+        erblexer.Lexer().build()
         self.parser = yacc.yacc(module=self, **kwargs)
         self.ast = ()
 

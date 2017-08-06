@@ -1,4 +1,3 @@
-import erblexer
 import erbparser
 import pprint
 
@@ -15,7 +14,6 @@ code = """
 
 """
 
-erblexer.Lexer().build()
 p = erbparser.Parser(debug=True)
 result = p.parse(code)
 pprint.pprint(result)
