@@ -14,6 +14,7 @@ class Lexer:
     t_TIMES             = r"\*"
     t_DIVIDE            = r"/"
     t_ARROW             = r"->"
+    t_LEFTARROW         = r"<-"
     t_COMMA             = r","
     t_GREATERTHAN       =r">"
     t_LESSTHAN          = r"<"

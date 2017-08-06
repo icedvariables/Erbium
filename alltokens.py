@@ -5,8 +5,7 @@ keywords = {
     "public": "PUBLIC",
     "true": "TRUE",
     "false": "FALSE",
-    "null": "NULL",
-    "ret": "RETURN"
+    "null": "NULL"
 }
 
 tokens = [
@@ -23,6 +22,7 @@ tokens = [
     "TIMES",
     "DIVIDE",
     "ARROW",
+    "LEFTARROW",
     "COMMA",
     "GREATERTHAN",
     "LESSTHAN",
