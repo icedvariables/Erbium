@@ -38,6 +38,10 @@ class Parser:
         "block : LCURLY RCURLY"
         p[0] = ("block", ())
 
+    def p_block_stat(self, p):
+        "block : statement"
+        p[0] = ("block", (p[1],))
+
     # STATEMENT
 
     def p_stat_ifelse(self, p):

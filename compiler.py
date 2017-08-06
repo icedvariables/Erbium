@@ -6,10 +6,10 @@ code = """
 /* Recursive fibonacci sequence generator! */
 
 (n) -> {
-    if n < 2 { <- n }
-    else{
+    if n < 2
+        <- n
+    else
         <- fib(n - 2) + fib(n - 1)
-    }
 }(10) /* Call the anonymous function immediately after defining it. */
 
 """
