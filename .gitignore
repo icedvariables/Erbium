@@ -101,3 +101,6 @@ ENV/
 # PLY
 parsetab.py
 parser.out
+
+# PyCharm
+.idea
