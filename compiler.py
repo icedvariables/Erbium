@@ -6,16 +6,14 @@ code = """
 
 /* Recursive fibonacci sequence generator! */
 
-(n) -> {
+fib = (n) -> {
     if n < 2
         <- n
     <- fib(n - 2) + fib(n - 1)
-}(10) /* Call the anonymous function immediately after defining it. */
+}
 
 """
 
 p = Parser(debug=True)
-ast = p.parse("a = 5")
+ast = p.parse(code)
 pprint.pprint(ast)
-executer = ExecuteAst(ast)
-print executer.execute()

@@ -3,6 +3,59 @@ import erblexer
 import alltokens
 import sys
 
+"""
+Erbium Grammar
+--------------
+
+chunk : statement chunk
+      | chunk
+
+block : '{' chunk '}'
+      | '{' '}'
+      | statement
+
+statement : 'if' expression block 'else' block
+          | 'if' expression block
+          | ID '=' expression
+          | '<-' expression
+
+expression : NUMBER
+           | DECIMAL-NUMBER
+           | CHARACTER
+           | ID
+           | STRING
+           | expression '[' expression ']'
+           | functioncall
+           | functiondefine
+           | array
+           | binop
+
+functioncall : expression '(' expressionlist ')'
+             | expression '(' ')'
+
+functiondefine : '(' idlist ')' '->' block
+               | '(' ')' '->' block
+
+array : '[' expressionlist ']'
+      | '[' ']'
+
+binop : expression '>' expression
+      | expression '<' expression
+      | expression '>=' expression
+      | expression '<=' expression
+      | expression '=' expression
+      | expression '+' expression
+      | expression '-' expression
+      | expression '*' expression
+      | expression '/' expression
+
+expressionlist : expression ',' expressionlist
+               | expression
+
+idlist : ID ',' idlist
+       | ID
+"""
+
 class Parser:
     tokens = alltokens.tokensKeywords
 
@@ -63,10 +116,6 @@ class Parser:
         value = p[3]
         p[0] = ("assign", name, value)
 
-    def p_stat_functioncall(self, p):
-        "statement : functioncall"
-        p[0] = p[1]
-
     def p_stat_return(self, p):
         "statement : LEFTARROW expression"
         p[0] = ("return", p[2])
@@ -89,57 +138,22 @@ class Parser:
         "expression : ID"
         p[0] = ("id", p[1])
 
-    def p_expr_functioncall(self, p):
-        "expression : functioncall"
-        p[0] = p[1]
-
-    def p_expr_functiondef(self, p):
-        "expression : functiondefine"
-        p[0] = p[1]
-
-    def p_expr_array(self, p):
-        "expression : LSQUARE expressionlist RSQUARE"
-        p[0] = ("array", p[2])
-
-    def p_expr_array_empty(self, p):
-        "expression : LSQUARE RSQUARE"
-        p[0] = ("array", ())
-
-    def p_expr_arrayaccess(self, p):
-        "expression : expression LSQUARE NUM RSQUARE"
-        p[0] = ("arrayaccess", p[1], p[3])
-
     def p_expr_string(self, p):
         "expression : STRING"
         p[0] = ("array", tuple(p[1]))
 
-    def p_expr_binop(self, p):
-        """expression : expression GREATERTHAN expression
-                      | expression LESSTHAN expression
-                      | expression GREATERTHANOREQUAL expression
-                      | expression LESSTHANOREQUAL expression
-                      | expression EQUALTO expression
-                      | expression PLUS expression
-                      | expression MINUS expression
-                      | expression TIMES expression
-                      | expression DIVIDE expression"""
+    def p_expr_arrayaccess(self, p):
+        "expression : expression LSQUARE expression RSQUARE"
+        p[0] = ("arrayaccess", p[1], p[3])
 
-        left = p[1]
-        operation = p[2]
-        right = p[3]
-        p[0] = ("binop", operation, left, right)
+    def p_expr_others(self, p):
+        """expression : functioncall
+                      | functiondefine
+                      | array
+                      | binop"""
+        p[0] = p[1]
 
-    # EXPRESSIONLIST
-
-    def p_exprlist(self, p):
-        "expressionlist : expression COMMA expressionlist"
-        p[0] = (p[1],) + p[3]
-
-    def p_exprlist_expr(self, p):
-        "expressionlist : expression"
-        p[0] = (p[1],)
-
-    # FUNCTIONCALL
+    # FUNCTION CALL
 
     def p_functioncall(self, p):
         "functioncall : expression LBRACKET expressionlist RBRACKET"
@@ -152,7 +166,7 @@ class Parser:
         name = p[1]
         p[0] = ("functioncall", name, ())
 
-    # FUNCTIONDEFINE
+    # FUNCTION DEFINITION
 
     def p_functiondef(self, p):
         "functiondefine : LBRACKET idlist RBRACKET ARROW block"
@@ -166,7 +180,45 @@ class Parser:
         block = p[4]
         p[0] = ("functiondefine", args, block)
 
-    # IDLIST
+    # ARRAY
+
+    def p_array(self, p):
+        "array : LSQUARE expressionlist RSQUARE"
+        p[0] = ("array", p[2])
+
+    def p_array_empty(self, p):
+        "array : LSQUARE RSQUARE"
+        p[0] = ("array", ())
+
+    # BINARY OPERATION
+
+    def p_binop(self, p):
+        """binop : expression GREATERTHAN expression
+                 | expression LESSTHAN expression
+                 | expression GREATERTHANOREQUAL expression
+                 | expression LESSTHANOREQUAL expression
+                 | expression EQUALTO expression
+                 | expression PLUS expression
+                 | expression MINUS expression
+                 | expression TIMES expression
+                 | expression DIVIDE expression"""
+
+        left = p[1]
+        operation = p[2]
+        right = p[3]
+        p[0] = ("binop", operation, left, right)
+
+    # EXPRESSION LIST
+
+    def p_exprlist(self, p):
+        "expressionlist : expression COMMA expressionlist"
+        p[0] = (p[1],) + p[3]
+
+    def p_exprlist_expr(self, p):
+        "expressionlist : expression"
+        p[0] = (p[1],)
+
+    # ID LIST
 
     def p_idlist(self, p):
         "idlist : ID COMMA idlist"
